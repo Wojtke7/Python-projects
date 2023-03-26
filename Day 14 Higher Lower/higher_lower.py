@@ -1,50 +1,52 @@
-import os 
+import os
 import random
 from game_data import data
-from art import logo,vs
-
+from art import logo, vs
 
 data1 = data
 
-def showScore(score):
+
+def show_score(score):
     if score == 0:
         return
     else:
-        print("Your right! Current score:" , score)
+        print("Your right! Current score:", score)
 
 
-def printObject(string, object1):
-    print("Compare", string, ": ", end='') 
+def print_object(string, object1):
+    print("Compare", string, ": ", end='')
     print(object1['name'], object1['description'], object1['country'], sep=', ')
 
 
-def drawA(data1):
+def draw_a(data1):
     A = random.choice(data1)
     return A
 
-def drawEnemy(data1):
-    enemy = random.choice(data1)    
+
+def draw_enemy(data1):
+    enemy = random.choice(data1)
     return enemy
+
 
 def game():
     CORRECT = True
-    A = drawA(data1)
-    enemy = drawEnemy(data1)
+    A = draw_a(data1)
+    enemy = draw_enemy(data1)
     score = 0
     while CORRECT:
         print(logo)
-        showScore(score)
-        printObject('A',A)
+        show_score(score)
+        print_object('A', A)
         print(vs)
-        printObject('B', enemy)
+        print_object('B', enemy)
 
         choose = input("Who has more followers? Type 'A' or 'B': ")
 
-        while True:    
+        while True:
             if choose == 'A':
                 if A['follower_count'] > enemy['follower_count']:
                     score += 1
-                    enemy = drawEnemy(data1)
+                    enemy = draw_enemy(data1)
                     break
                 else:
                     os.system('cls')
@@ -57,7 +59,7 @@ def game():
                 if enemy['follower_count'] > A['follower_count']:
                     score += 1
                     A = enemy
-                    enemy = drawEnemy(data1)
+                    enemy = draw_enemy(data1)
                     break
                 else:
                     os.system('cls')
@@ -68,20 +70,7 @@ def game():
                     break
             else:
                 choose = input("You type something wrong, try again: ")
-        os.system('cls')         
+        os.system('cls')
 
-                    
+
 game()
-
-
-
-
-
-
-
-
-
-    
-
-
-
