@@ -70,3 +70,9 @@ class Snake(Turtle):
             return True
         else:
             return False
+
+    def snake_collision(self):
+        for seg_num in range(len(self.segments) - 1, 0, -1):
+            if self.segments[0].position() == self.segments[seg_num].position():
+                return True
+        return False
