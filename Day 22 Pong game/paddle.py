@@ -18,7 +18,7 @@ class Paddle(Turtle):
             i = Turtle("square")
             i.hideturtle()
             i.color("white")
-            i.speed("fastest")
+            i.speed(0)
             i.penup()
             i.setheading(90)
             if side == "L":
