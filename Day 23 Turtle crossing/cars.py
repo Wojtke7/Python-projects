@@ -1,12 +1,12 @@
 from turtle import Turtle
 import random
 from list_of_colors import color_list
+RANDOM_POS = []
 
 
 class Car(Turtle):
     def __init__(self, screen):
         super().__init__(shape="square")
-        #need to change randint to randomchoice to avoid collisions with eachother
         random_y = random.randint(-screen.window_height() / 2 + 60, screen.window_height() / 2 - 60)
         random_x = random.randint(screen.window_width() / 2 - 120, screen.window_width() / 2 - 60)
         self.hideturtle()
@@ -26,3 +26,4 @@ class Car(Turtle):
         for i in cars:
             if abs(i.ycor() - self.ycor()) <= 40:
                 self.sety(i.ycor() + 80)
+
