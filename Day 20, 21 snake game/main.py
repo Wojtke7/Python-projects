@@ -25,10 +25,12 @@ while is_on:
     eo.move()
     if food.check_food(eo):
         food.random_cor(screen1)
-        score.change_score()
+        score.increase_score()
         eo.add_piece()
     if eo.wall_collision(screen1) or eo.snake_collision():
-        break
+        score.reset()
+        eo.reset()
+
 
 score.game_over()
 screen1.exitonclick()
