@@ -28,10 +28,13 @@ data = pandas.read_csv("50_states.csv")
 states_names = data["state"].to_list()
 print(type(states_names[0]))
 
-answer_state = screen.textinput(title="Guess the State", prompt="What's another state's name?")
+answer_state = screen.textinput(title="Guess the State", prompt="What's another state's name?").title()
 num_of_states = 0
 
 while True:
+
+    if not states_names or answer_state == "Exit":
+        break
 
     if check_states(states_names, answer_state):
         states_names.pop(states_names.index(answer_state))
@@ -45,9 +48,10 @@ while True:
         writing.setposition(coordinate_x, coordinate_y)
         writing.write(f"{row.state.item()}", align="center", font=("Arial", 8, "normal"))
 
-    answer_state = screen.textinput(title=f"{num_of_states} States Correct", prompt="What's another state's name?")
-
-    if not states_names:
-        break
+    answer_state = screen.textinput(title=f"{num_of_states} States Correct",
+                                    prompt="What's another state's name?").title()
 
     screen.update()
+
+df = pandas.DataFrame(states_names)
+df.to_csv("G:/CODING/100 Days of code Python/Day 25 CSV and Panda library/states_to_learn.csv", index=False, header=False)
