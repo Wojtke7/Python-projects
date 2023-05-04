@@ -4,6 +4,25 @@ import random
 import pyperclip
 import json
 
+
+# ---------------------------- FINDING PASSWORD ------------------------------- #
+def find_password():
+    website_name = website_entry.get()
+
+    try:
+        with open("data.json", "r") as data_file:
+            # Reading old data
+            data = json.load(data_file)
+            try:
+                email = data[website_name]["email"]
+                password = data[website_name]["password"]
+                messagebox.showinfo(title="Info", message=f"Website name: {website_name} \nE-mail: {email} \nPassword: {password}")
+            except KeyError:
+                messagebox.showerror(title="Info", message=f"No details for the website exists")
+    except FileNotFoundError:
+        messagebox.showinfo(title="Info", message="No data file found")
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
            'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
@@ -28,7 +47,6 @@ def random_password():
     password = "".join(password_list)
 
     return password
-
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add():
@@ -82,7 +100,7 @@ window = Tk()
 window.title("Password Manager")
 window.config(padx=30, pady=30)
 
-# Canva
+# Canvas
 pass_canva = Canvas(width=200, height=200, highlightthickness=0)
 lock_image = PhotoImage(file="logo.png")
 pass_canva.create_image(100, 100, image=lock_image)
@@ -92,23 +110,23 @@ pass_canva.grid(column=1, row=0)
 website_label = Label(text="Website:", font=("Arial", 10, "bold"))
 website_label.grid(column=0, row=1)
 
-website_entry = Entry(width=35)
-website_entry.grid(column=1, row=1, columnspan=2, sticky="nw")
+website_entry = Entry(width=24)
+website_entry.grid(column=1, row=1, columnspan=2, sticky="w")
 website_entry.focus()
 
 # Email
 email_label = Label(text="Email/Username:", font=("Arial", 10, "bold"))
 email_label.grid(column=0, row=2)
 
-email_entry = Entry(width=35)
+email_entry = Entry(width=44)
 email_entry.grid(column=1, row=2, columnspan=2, sticky="nw")
 email_entry.insert(0, string="wojtekmarcela@interia.pl")
 # Password
 password_label = Label(text="Password:", font=("Arial", 10, "bold"))
 password_label.grid(column=0, row=3)
 
-password_entry = Entry(width=21)
-password_entry.grid(column=1, row=3, sticky="nw")
+password_entry = Entry(width=24)
+password_entry.grid(column=1, row=3, sticky="w")
 
 password_button = Button(text="Generate Password", command=generate_password)
 password_button.grid(column=2, row=3, sticky="nw")
@@ -116,5 +134,9 @@ password_button.grid(column=2, row=3, sticky="nw")
 # Add
 add_button = Button(text="Add", width=36, command=add)
 add_button.grid(column=1, row=4, columnspan=2, sticky="nw")
+
+# Search button
+search_button = Button(text="Search", width=16, command=find_password)
+search_button.grid(column=2, row=1)
 
 window.mainloop()
