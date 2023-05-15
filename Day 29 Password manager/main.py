@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
-import json
+import csv
 
 
 # ---------------------------- FINDING PASSWORD ------------------------------- #
@@ -10,15 +10,19 @@ def find_password():
     website_name = website_entry.get()
 
     try:
-        with open("data.json", "r") as data_file:
+        with open("dane.csv", "r", newline="") as csv_file:
             # Reading old data
-            data = json.load(data_file)
-            try:
-                email = data[website_name]["email"]
-                password = data[website_name]["password"]
-                messagebox.showinfo(title="Info", message=f"Website name: {website_name} \nE-mail: {email} \nPassword: {password}")
-            except KeyError:
-                messagebox.showerror(title="Info", message=f"No details for the website exists")
+            csv_reader = csv.DictReader(csv_file, delimiter=";")
+
+            for row in csv_reader:
+                if row["Website"] == website_name:
+                    email = row["Email"]
+                    password = row["Password"]
+                    date = row["Expiring date"]
+                    messagebox.showinfo(title="Info",
+                                        message=f"Website name: {website_name} \nE-mail: {email} \nPassword: {password} \nExpiring date: {date} ")
+                    return
+            messagebox.showerror(title="Info", message=f"No details for the website exists")
     except FileNotFoundError:
         messagebox.showinfo(title="Info", message="No data file found")
 
@@ -48,43 +52,67 @@ def random_password():
 
     return password
 
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def add():
     if len(website_entry.get()) == 0 or len(password_entry.get()) == 0 or len(email_entry.get()) == 0:
         messagebox.showinfo(title="Warning", message="There is a missing argument")
     else:
+        expiring_date = f"{day_spinbox.get()}.{month_spinbox.get()}.{year_spinbox.get()}"
+        date_msgbox = messagebox.askyesno(f"Expiring date",
+                                          message=f"Would you like to set expiring date: {expiring_date} ?")
+
+        if not date_msgbox:
+            expiring_date = f"Password without expiring date"
+
         website_name = website_entry.get()
         email_name = email_entry.get()
         password = password_entry.get()
+
         new_data = {
             website_name: {
-                "email": email_name,
-                "password": password,
+                "Email": email_name,
+                "Password": password,
+                "Expiring date": expiring_date
             }
         }
 
         msg_box = messagebox.askokcancel(title=website_name,
-                                         message=f"These are the details entered: \nEmail: {email_name} \n"
-                                                 f"Password: {password} \nIs it ok to save ?")
+                                         message=f"These are the details entered: \n\nEmail: {email_name} \n\n"
+                                                 f"Password: {password} \n\nExpiring date: {expiring_date} \n\nIs it "
+                                                 f"ok to"
+                                                 f"save ? ")
 
         if msg_box:
-
+            header = None
             try:
-                with open("data.json", "r") as data_file:
-                    # Reading old data
-                    data = json.load(data_file)
+                with open("dane.csv", "r", newline="") as file:
+
+                    reader = csv.reader(file, delimiter=";")
+                    header = next(reader)
+
             except FileNotFoundError:
-                with open("data.json", "w") as data_file:
-                    json.dump(new_data, data_file, indent=4)
-            else:
-                # Updating old data with new data
-                data.update(new_data)
-                # Saving updated data
-                with open("data.json", "w") as data_file:
-                    json.dump(data, data_file, indent=4)
+                with open("dane.csv", "w", newline="") as file:
+                    writer = csv.writer(file, delimiter=";")
+                    writer.writerow(["Website", "Email", "Password", "Expiring date"])
+                    header = ["Website", "Email", "Password", "Expiring date"]
+
             finally:
-                website_entry.delete(0, END)
-                password_entry.delete(0, END)
+                with open("dane.csv", "a", newline="") as file:
+
+                    writer = csv.writer(file, delimiter=";")
+
+                    if header is None or header != ["Website", "Email", "Password", "Expiring date"]:
+                        writer.writerow(["Website", "Email", "Password", "Expiring date"])
+
+                    for website, info in new_data.items():
+                        email = info["Email"]
+                        password = info['Password']
+                        expiring_date = info['Expiring date']
+                        writer.writerow([website, email, password, expiring_date])
+
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 def generate_password():
@@ -110,7 +138,7 @@ pass_canva.grid(column=1, row=0)
 website_label = Label(text="Website:", font=("Arial", 10, "bold"))
 website_label.grid(column=0, row=1)
 
-website_entry = Entry(width=24)
+website_entry = Entry(width=30)
 website_entry.grid(column=1, row=1, columnspan=2, sticky="w")
 website_entry.focus()
 
@@ -118,25 +146,42 @@ website_entry.focus()
 email_label = Label(text="Email/Username:", font=("Arial", 10, "bold"))
 email_label.grid(column=0, row=2)
 
-email_entry = Entry(width=44)
+email_entry = Entry(width=30)
 email_entry.grid(column=1, row=2, columnspan=2, sticky="nw")
-email_entry.insert(0, string="wojtekmarcela@interia.pl")
+email_entry.insert(0, string="maarcela@op.pl")
 # Password
 password_label = Label(text="Password:", font=("Arial", 10, "bold"))
 password_label.grid(column=0, row=3)
 
-password_entry = Entry(width=24)
+password_entry = Entry(width=30)
 password_entry.grid(column=1, row=3, sticky="w")
 
-password_button = Button(text="Generate Password", command=generate_password)
+password_button = Button(text="Generate Password", command=generate_password, width=16)
 password_button.grid(column=2, row=3, sticky="nw")
 
 # Add
-add_button = Button(text="Add", width=36, command=add)
-add_button.grid(column=1, row=4, columnspan=2, sticky="nw")
+add_button = Button(text="Add", width=25, command=add)
+add_button.grid(column=1, row=5, columnspan=2, sticky="nw")
 
 # Search button
 search_button = Button(text="Search", width=16, command=find_password)
 search_button.grid(column=2, row=1)
+
+# Date label
+
+date_label = Label(text="Expiring date:", font=("Arial", 10, "bold"))
+date_label.grid(column=0, row=4)
+
+# Day date spinbox
+spinbox_container = Frame(window)
+spinbox_container.grid(column=1, row=4, sticky="nw")
+
+day_spinbox = Spinbox(spinbox_container, from_=1, to=31, wrap=True, width=7)
+month_spinbox = Spinbox(spinbox_container, from_=1, to=12, wrap=True, width=8)
+year_spinbox = Spinbox(spinbox_container, from_=2023, to=2300, wrap=True, width=8)
+
+day_spinbox.grid(row=0, column=0)
+month_spinbox.grid(row=0, column=1)
+year_spinbox.grid(row=0, column=2)
 
 window.mainloop()
