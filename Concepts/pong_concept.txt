@@ -1,0 +1,4 @@
+class - paddle (cllisions with ball)(moving) 
+class - ball (collisions with screen)(detecting when off the screeen)
+class - screen ()
+class- scoreboard (change score) (game over)

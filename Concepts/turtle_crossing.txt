@@ -1,0 +1,3 @@
+turtle- (moving)(collsions with cars)(cross the finish)
+cars - (moving)(random creating)(random colors)
+screen - (you win/game over writing)

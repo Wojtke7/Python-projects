@@ -12,7 +12,7 @@ class QuizBrain:
         self.question_number += 1
         correct_type = True
         while correct_type:
-            answer1 = input(f"Q.{self.question_number}: {current_question.text} (True/False)?: ")
+            answer1 = input(f"Q.{self.question_number}: {current_question.question_text} (True/False)?: ")
             correct_type = self.check_answer(answer1, current_question)
             if self.tries == 0:
                 print(f"End of the game, you lose")

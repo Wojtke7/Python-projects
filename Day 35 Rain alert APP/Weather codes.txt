@@ -1,0 +1,17 @@
+61 - "description":"Light Rain"
+0 - Sunny 
+95 - "description":"Thunderstorm"
+80 - "description":"Light Showers"
+3- "description":"Cloudy",
+2 - "description":"Partly Cloudy",
+1- "description":"Mainly Sunny",
+45 - "description":"Foggy"
+51 - lekka mżawka
+53 - mżawka
+55- mocna mżawka
+56 - lekka mrożąca mżawka
+57 - mrożąca mżawka
+63 - rain
+66 - description":"Freezing Rain"
+67 - "description":"Freezing Rain"
+wszystko od 50 ----> Parasol
