@@ -8,15 +8,15 @@ class FlightData:
     data = flightSearch.search_flights()
 
     def find_best_fly(self):
-        flies = []
+        flights = []
 
-        for fly in self.data:
-            if fly is not None:
-                dep_city = fly["cityFrom"]
-                dest_city = fly["cityTo"]
+        for flight in self.data:
+            if flight is not None:
+                dep_city = flight["cityFrom"]
+                dest_city = flight["cityTo"]
 
-                dep_date = fly["local_departure"].split("T")[0]
-                days = fly["nightsInDest"]
+                dep_date = flight["local_departure"].split("T")[0]
+                days = flight["nightsInDest"]
                 date = datetime.strptime(dep_date, '%Y-%m-%d')
                 back_date = (date + timedelta(days=days)).strftime("%Y-%m-%d")
                 print(dep_date)
@@ -25,18 +25,18 @@ class FlightData:
                 print(f"Flight from {dep_city} to {dest_city} changed")
 
                 dict = {
-                    "lowest_price": fly["price"],
-                    "dep_IATA": fly["flyFrom"],
-                    "dest_IATA": fly["flyTo"],
-                    "dep_city": fly["cityFrom"],
-                    "dest_city": fly["cityTo"],
+                    "lowest_price": flight["price"],
+                    "dep_IATA": flight["flyFrom"],
+                    "dest_IATA": flight["flyTo"],
+                    "dep_city": flight["cityFrom"],
+                    "dest_city": flight["cityTo"],
                     "dep_date": dep_date,
                     "back_date": back_date
                 }
 
-                flies.append(dict)
+                flights.append(dict)
             else:
-                flies.append(None)
+                flights.append(None)
 
-        # print(flies)
-        return flies
+        # print(flights)
+        return flights
