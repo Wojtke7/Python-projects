@@ -3,7 +3,7 @@ from twilio.rest import Client
 
 class NotificationManager:
     account_sid = 'AC6674645ca792857c7c35c7f413c96414'
-    auth_token = '6e8adcacb5a3182c3a7d73bc94da6299'
+    auth_token = 'SECRET_TOKEN'
     client = Client(account_sid, auth_token)
 
     def send_sms(self, dict):
