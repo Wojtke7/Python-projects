@@ -30,7 +30,7 @@ class FlightSearch:
                 "fly_from": self.POLAND_IATA,
                 "fly_to": destination,
                 "date_from": today_date,
-                "date_to ": six_month_later.strftime("%d/%m/%Y"),
+                "date_to": six_month_later.strftime("%d/%m/%Y"),
                 "curr": "EUR",
                 "price_to": price,
                 "max_stopovers": "0",
@@ -45,14 +45,32 @@ class FlightSearch:
             # print(json_respond)
 
             if data["_results"] != 0 and data["data"][0]["price"] < price:
+                print(data["data"][0])
                 responds.append(data["data"][0])
+            elif data["_results"] == 0:
+                print(f"Nie znaleziono bezpośredniego lotu do {destination}, szukanie z przesiadką")
+                body["max_stopovers"] = "2"
+                respond2 = requests.get(url=self.flight_url, headers=flight_header, params=body)
+                data2 = respond2.json()
+
+                #Znaleziono z przesiadką i cena niższa
+                if data2["_results"] != 0 and data2["data"][0]["price"] < price:
+                    print(f"Znaleziono lot do {destination} z przesiadką!")
+                    print(data2["data"][0])
+                    responds.append(data2["data"][0])
+                else:
+                    print(f"Nie znaleziono lotu z jedną przesiadką, brak lotów do {destination} lub za wysoka cena")
+                    responds.append(None)
+
             else:
+                print(f"Znaleziono bezpośredni lot do {destination}, ale cena nie była korzystniejsza")
                 responds.append(None)
 
         return responds
 
-# flightSearch = FlightSearch()
-# flightSearch.search_flights()
+
+flightSearch = FlightSearch()
+flightSearch.search_flights()
 
 # print(destinations)
 # print(prices)

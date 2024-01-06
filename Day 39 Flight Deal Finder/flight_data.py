@@ -11,9 +11,16 @@ class FlightData:
         flights = []
 
         for flight in self.data:
-            if flight is not None:
+            if flight is not None and flight["has_airport_change"] is False:
                 dep_city = flight["cityFrom"]
                 dest_city = flight["cityTo"]
+
+                if len(flight["route"]) > 2:
+                    stepover_city = flight["route"][1]["cityFrom"]
+                    stepover_city_IATA = flight["route"][1]["flyFrom"]
+                else:
+                    stepover_city = None
+                    stepover_city_IATA = None
 
                 dep_date = flight["local_departure"].split("T")[0]
                 days = flight["nightsInDest"]
@@ -31,7 +38,9 @@ class FlightData:
                     "dep_city": flight["cityFrom"],
                     "dest_city": flight["cityTo"],
                     "dep_date": dep_date,
-                    "back_date": back_date
+                    "back_date": back_date,
+                    "stepover_city": stepover_city,
+                    "stepover_IATA": stepover_city_IATA
                 }
 
                 flights.append(dict)
