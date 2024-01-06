@@ -25,7 +25,7 @@ with open(file="quotes.txt", mode="r") as quotes:
         quotes_list.append(line.strip())
 
 now = dt.datetime.now()
-current_day = now.weekday()
+current_day = 1
 
 if current_day == 1:
     random_quote = random.choice(quotes_list)
@@ -33,5 +33,5 @@ if current_day == 1:
         connection.starttls()
         connection.login(user=testing_mail,
                          password=testing_password)
-        connection.sendmail(from_addr=testing_mail, to_addrs="Emi.foltyn@interia.pl",
+        connection.sendmail(from_addr=testing_mail, to_addrs="madridistaz",
                             msg=f"Subject:Random quote\n\n{random_quote}")

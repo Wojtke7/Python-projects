@@ -69,9 +69,8 @@ class FlightSearch:
         return responds
 
 
-flightSearch = FlightSearch()
-flightSearch.search_flights()
-
+# flightSearch = FlightSearch()
+# flightSearch.search_flights()
 # print(destinations)
 # print(prices)
 # today_date = datetime.now().strftime("%d/%m/%Y")
