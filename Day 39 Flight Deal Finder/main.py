@@ -1,6 +1,7 @@
 from flight_data import FlightData
 from notification_manager import NotificationManager
 from data_manager import DataManager
+
 flightData = FlightData()
 New_flights = flightData.find_best_fly()
 data_manager = DataManager()
